@@ -172,9 +172,16 @@
           var listener = function(event) {
             var val = applyViewFn.call(this, config.getVal, $el, event, config, slice.call(arguments, 1));
 
+              // ===
+              // Add the event source to the event options, enabling events to determine what triggered an event
+              // TODO: Write Unit Tests, submit pull request
+              var eventOptions = _.clone(options);
+              eventOptions.event = event;
+              // ===
+
             // Don't update the model if false is returned from the `updateModel` configuration.
             var currentVal = evaluateBoolean(config.updateModel, val, event, config);
-            if (currentVal) setAttr(model, modelAttr, val, options, config);
+            if (currentVal) setAttr(model, modelAttr, val, eventOptions /* options */, config);
           };
           var sel = selector === ':el'? '' : selector;
           this.$el.on(eventName, sel, _.bind(listener, this));
