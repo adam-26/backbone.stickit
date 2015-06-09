@@ -344,6 +344,12 @@
 
         // If it is a class then we need to remove the last value and add the new.
         if (attrConfig.name === 'class') {
+          // TODO: === Start of custom behavior to support isomorphic behavior from server bindings ===
+          if (lastClass === '' && $el.attr('data-class-svr')) { // is there a svr applied class?
+            lastClass = $el.attr('data-class-svr'); // get the dynamic class set by the server
+            $el.removeAttr('data-class-svr'); // delete the svr class
+          }
+          // TODO: === End of custom behavior ===
           $el.removeClass(lastClass).addClass(val);
           lastClass = val;
         } else {
